@@ -8,7 +8,7 @@ import json
 import random
 import string
 from datetime import datetime, timedelta
-
+from pyrogram.enums import ParseMode
 from pyrogram import Client, filters
 from pyrogram.types import (
     Message, CallbackQuery,
@@ -272,12 +272,12 @@ async def send_msg(client, chat_id, text, markup=None, is_cb=False, cb_msg=None)
     try:
         res = await client.copy_message(
             chat_id, from_chat_id=PIC_CHANNEL, message_id=PIC_MSG_ID,
-            caption=final, parse_mode="html", reply_markup=markup
+            caption=final, parse_mode=ParseMode.HTML, rep
         )
         set_last_msg(chat_id, res.id)
         return res.id
     except Exception:
-        res = await client.send_message(chat_id, final, parse_mode="html",
+        res = await client.send_message(chat_id, final, ParseMode.HTML",
                                         reply_markup=markup,
                                         disable_web_page_preview=True)
         set_last_msg(chat_id, res.id)
