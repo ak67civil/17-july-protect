@@ -277,7 +277,7 @@ async def send_msg(client, chat_id, text, markup=None, is_cb=False, cb_msg=None)
         set_last_msg(chat_id, res.id)
         return res.id
     except Exception:
-        res = await client.send_message(chat_id, final, ParseMode.HTML",
+        res = await client.send_message(chat_id, final, parse_mode=ParseMode.HTML",
                                         reply_markup=markup,
                                         disable_web_page_preview=True)
         set_last_msg(chat_id, res.id)
