@@ -956,7 +956,7 @@ async def msg_handler(client: Client, message: Message):
 # ---------------------------------------------------------------------------
 # Channel Post Handler (the core protection engine)
 # ---------------------------------------------------------------------------
-@app.on_message(filters.channel)
+@app.on_message(filters.incoming & ~filters.private & ~filters.group)
 async def channel_post_handler(client: Client, message: Message):
     post_chat_id = str(message.chat.id).strip()
     admins = get_admins()
