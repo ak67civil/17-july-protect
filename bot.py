@@ -271,9 +271,10 @@ async def send_msg(client, chat_id, text, markup=None, is_cb=False, cb_msg=None)
 
     try:
         res = await client.copy_message(
-            chat_id, from_chat_id=PIC_CHANNEL, message_id=PIC_MSG_ID,
-            caption=final, parse_mode=ParseMode.HTML, rep
+    chat_id=chat_id, from_chat_id=PIC_CHANNEL, message_id=PIC_MSG_ID,
+    caption=final, parse_mode=ParseMode.HTML, reply_markup=markup
         )
+    
         set_last_msg(chat_id, res.id)
         return res.id
     except Exception:
