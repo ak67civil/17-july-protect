@@ -253,9 +253,9 @@ async def send_msg(client, chat_id, text, markup=None, is_cb=False, cb_msg=None)
         mid = cb_msg.id
         try:
             if cb_msg.photo or cb_msg.video or cb_msg.document or cb_msg.animation:
-                await cb_msg.edit_caption(final, parse_mode="html", reply_markup=markup)
+                await cb_msg.edit_caption(final, parse_mode=ParseMode.HTML, reply_markup=markup)
             else:
-                await cb_msg.edit_text(final, parse_mode="html", reply_markup=markup,
+                await cb_msg.edit_text(final, parse_mode=ParseMode.HTML, reply_markup=markup,
                                        disable_web_page_preview=True)
             return mid
         except MessageNotModified:
@@ -367,7 +367,7 @@ async def start_handler(client: Client, message: Message):
                         apply_font(f"<b>🔔 New User Alert</b>\n\n"
                                    f"<b>👤 Name:</b> <code>{safe_name(message.from_user)}</code>\n"
                                    f"<b>🆔 ID:</b> <code>{uid}</code>"),
-                        parse_mode="html", reply_markup=kb
+                        parse_mode=ParseMode.HTML, reply_markup=kb
                     )
 
         set_prop(f"views_by_{uid}", get_prop(f"views_by_{uid}", 0) + 1)
@@ -385,10 +385,10 @@ async def start_handler(client: Client, message: Message):
         for frame in frames[1:]:
             await asyncio.sleep(1.8)
             try:
-                await client.edit_message_caption(uid, mid, caption=f"<code>{frame}</code>", parse_mode="html")
+                await client.edit_message_caption(uid, mid, caption=f"<code>{frame}</code>", parse_mode=ParseMode.HTML)
             except Exception:
                 try:
-                    await client.edit_message_text(uid, mid, text=f"<code>{frame}</code>", parse_mode="html")
+                    await client.edit_message_text(uid, mid, text=f"<code>{frame}</code>", parse_mode=ParseMode.HTML)
                 except Exception:
                     pass
         try:
@@ -400,7 +400,7 @@ async def start_handler(client: Client, message: Message):
         mtype = media_data.get("type", "video")
         fid = media_data.get("file_id")
         cap = apply_font(media_data.get("caption", "")) or None
-        opts = dict(chat_id=uid, parse_mode="html", protect_content=True)
+        opts = dict(chat_id=uid, parse_mode=ParseMode.HTML, protect_content=True)
         if cap:
             opts["caption"] = cap
         try:
@@ -947,7 +947,7 @@ async def msg_handler(client: Client, message: Message):
                 apply_font(f"<b>📣 Broadcast Done</b>\n\n"
                            f"<b>✅ Sent:</b> <code>{sent}</code>\n"
                            f"<b>❌ Failed:</b> <code>{failed}</code>"),
-                parse_mode="html",
+                parse_mode=ParseMode.HTML,
                 reply_markup=InlineKeyboardMarkup([[btn("✔️ Done", "owner_main")]]))
         except Exception:
             pass
@@ -1011,7 +1011,7 @@ async def channel_post_handler(client: Client, message: Message):
                 try:
                     await client.send_message(
                         int(mapped_source), send_text,
-                        parse_mode="html", reply_markup=inline_btn
+                        parse_mode=ParseMode.HTML, reply_markup=inline_btn
                     )
                     break
                 except FloodWait as e:
