@@ -978,6 +978,9 @@ async def channel_post_handler(client: Client, message: Message):
     log_chan = get_prop("admin_log_chan")
     sent_to_sources = []
 
+    logger.info(f"Channel post received from chat_id={post_chat_id} type={media_type}")
+    matched_any = False
+
     for aid in admins:
         if not is_admin(aid):
             continue
@@ -987,6 +990,7 @@ async def channel_post_handler(client: Client, message: Message):
             mapped_source = str(pair["source"]).strip()
             if mapped_target != post_chat_id or mapped_source in sent_to_sources:
                 continue
+            matched_any = True
             sent_to_sources.append(mapped_source)
 
             unique_id = gen_uid(aid)
@@ -1012,15 +1016,21 @@ async def channel_post_handler(client: Client, message: Message):
                     break
                 except FloodWait as e:
                     await asyncio.sleep(e.value)
-                except Exception:
+                except Exception as e:
+                    logger.error(f"Failed to send button to source={mapped_source} "
+                                 f"(target={mapped_target}, admin={aid}): {e}")
                     if attempt < 2:
                         await asyncio.sleep(2)
+
+    if not matched_any:
+        logger.warning(f"No pair matched target={post_chat_id}. "
+                        f"Check your linked Target channel ID matches this exactly.")
 
     if log_chan and log_chan != "Unassigned":
         try:
             await client.copy_message(int(log_chan), message.chat.id, message.id)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"Log channel copy failed for log_chan={log_chan}: {e}")
 
 # ---------------------------------------------------------------------------
 # Run
