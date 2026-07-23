@@ -3,7 +3,7 @@ import re
 import time
 import logging
 import asyncio
-import sqlite3
+import pymongo
 import json
 import random
 import string
@@ -30,7 +30,7 @@ PIC_MSG_ID  = 133
 logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = Client("protection_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN, workers=1)
+app = Client("protection_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
 # ---------------------------------------------------------------------------
 # Database (SQLite)
