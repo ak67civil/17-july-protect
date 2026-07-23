@@ -468,7 +468,6 @@ async def start_handler(client: Client, message: Message):
 # ---------------------------------------------------------------------------
 # Callback Query Handler
 # ---------------------------------------------------------------------------
-@app.on_callback_query()
 async def safe_answer(query: CallbackQuery, *args, **kwargs):
     """query.answer() wrapper — Telegram invalidates a callback query if it
     isn't answered fast enough (or if it's answered twice). Swallow that
@@ -477,7 +476,8 @@ async def safe_answer(query: CallbackQuery, *args, **kwargs):
         await query.answer(*args, **kwargs)
     except QueryIdInvalid:
         logger.warning(f"Callback query expired before it could be answered (uid={query.from_user.id})")
-
+        
+@app.on_callback_query()
 async def cb_handler(client: Client, query: CallbackQuery):
     uid = query.from_user.id
     d = query.data
